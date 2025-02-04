@@ -1,6 +1,6 @@
-import { Router, Request, Response } from "express";
-import { createChallenge, getAllChallenges, getChallengeById } from "../controllers/challenge.controller";
-import {authenticateJWT} from '../middleware/auth.middleware';
+import { Request, Response, Router } from "express";
+import { createChallenge, getAllChallenges, getChallengeById, submitSolution } from "../controllers/challenge.controller";
+import { authenticateJWT } from '../middleware/auth.middleware';
 
 const router = Router();
 
@@ -12,5 +12,9 @@ router.get("/challenges", async (req: Request, res: Response) => {
 
 router.get("/challenges/:id", async (req: Request, res: Response) => {
     await getChallengeById(req, res)});
+
+router.post("/challenges/:id/solutions", authenticateJWT, async (req: Request, res: Response) => {
+    await submitSolution(req, res);
+});
 
 export default router;

@@ -9,6 +9,10 @@ const challengeSchema = z.object({
     difficulty: z.enum(["EASY", "MEDIUM", "HARD"]),
 })
 
+const solutionSchema = z.object({
+  code: z.string().min(10, "Solution code must be at least 10 characters long"),
+});
+
 export const createChallenge = async (req: Request, res: Response) => {
     try {
 
@@ -62,5 +66,44 @@ export const getChallengeById = async (req: Request, res: Response) => {
       return res.status(200).json(challenge);
     } catch (error) {
       return res.status(500).json({ message: "Error retrieving challenge" });
+    }
+  };
+
+
+  export const submitSolution = async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const { code } = solutionSchema.parse(req.body);
+  
+      if (!(req as any).user) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+  
+      const challenge = await prisma.challenge.findUnique({
+        where: { id },
+      });
+  
+      if (!challenge) {
+        return res.status(404).json({ message: "Challenge not found" });
+      }
+  
+      const newSolution = await prisma.solution.create({
+        data: {
+          code,
+          user: {
+            connect: { id: (req as any).user.userId }, // Connect the challenge to the authenticated user
+          },
+          challenge: {
+            connect: { id: id }, // Connect the challenge to the authenticated user
+          },
+        },
+      });
+  
+      return res.status(201).json(newSolution);
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(400).json({ message: error.message || "Invalid solution data" });
+      }
+      return res.status(400).json({ message: "Invalid solution data" });
     }
   };
