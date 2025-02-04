@@ -30,6 +30,11 @@ enum Difficulty {
   MEDIUM
   HARD
 }
+enum ChallengeStatus {
+  OPEN
+  CLOSED
+}
+
 model Challenge {
   id          String   @id @default(uuid())
   title       String
@@ -39,6 +44,7 @@ model Challenge {
   userId      String
   user        User     @relation(fields: [userId], references: [id])
   solutions   Solution[]
+  status      ChallengeStatus @default(OPEN)
 }
 
 

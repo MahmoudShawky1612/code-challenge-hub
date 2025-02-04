@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { ChallengeStatus, PrismaClient } from "@prisma/client";
 import { Request, Response } from 'express';
 import { z } from 'zod';
 const prisma = new PrismaClient();
@@ -173,3 +173,35 @@ export const acceptSolution = async(req:Request, res:Response)=>{
       return res.status(500).json({ message: "Error accepting solution" });
     }
   };
+
+  export const updateChallengeStatus = async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const { status } = req.body;
+  
+      if (!Object.values(ChallengeStatus).includes(status)) {
+        return res.status(400).json({ message: "Invalid status" });
+      }
+  
+      const challengeMaker = await prisma.challenge.findUnique({
+        where:{id},
+        select: {
+          userId: true,
+      },
+      });
+
+      if (challengeMaker?.userId !== (req as any).user.userId) {
+        return res.status(401).json({ message: "You are not allowed to do this action" });
+      }
+      
+      const updatedChallenge = await prisma.challenge.update({
+        where: { id },
+        data: { status: status },
+      });
+  
+      return res.status(200).json(updatedChallenge);
+    } catch (error) {
+      return res.status(500).json({ message: "Error updating challenge status" });
+    }
+  };
+  

@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { createChallenge, getAllChallenges, getChallengeById, submitSolution, getSolutionsByChallenge, acceptSolution } from "../controllers/challenge.controller";
+import { createChallenge, getAllChallenges, getChallengeById, submitSolution, getSolutionsByChallenge, acceptSolution, updateChallengeStatus } from "../controllers/challenge.controller";
 import { authenticateJWT } from '../middleware/auth.middleware';
 
 const router = Router();
@@ -27,4 +27,9 @@ router.get("/challenges/:id/solutions", async (req: Request, res: Response) => {
   router.patch("/challenges/:id/solutions/:solutionId/accept", authenticateJWT, async (req: Request, res: Response) => {
     await acceptSolution(req, res);
   });
+
+router.patch("/challenges/:id/status", authenticateJWT, async (req: Request, res: Response) => {
+    await updateChallengeStatus(req, res);
+  });
+  
 export default router;
