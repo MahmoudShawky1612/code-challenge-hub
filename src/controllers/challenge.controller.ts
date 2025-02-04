@@ -193,7 +193,7 @@ export const acceptSolution = async(req:Request, res:Response)=>{
       if (challengeMaker?.userId !== (req as any).user.userId) {
         return res.status(401).json({ message: "You are not allowed to do this action" });
       }
-      
+
       const updatedChallenge = await prisma.challenge.update({
         where: { id },
         data: { status: status },
@@ -202,6 +202,30 @@ export const acceptSolution = async(req:Request, res:Response)=>{
       return res.status(200).json(updatedChallenge);
     } catch (error) {
       return res.status(500).json({ message: "Error updating challenge status" });
+    }
+  };
+  
+
+  export const likeSolution = async (req: Request, res: Response) => {
+    try {
+      const { solutionId } = req.params;
+  
+      const solution = await prisma.solution.findUnique({
+        where: { id: solutionId },
+      });
+  
+      if (!solution) {
+        return res.status(404).json({ message: "Solution not found" });
+      }
+  
+      const updatedSolution = await prisma.solution.update({
+        where: { id: solutionId },
+        data: { likes: solution.likes + 1 },
+      });
+  
+      return res.status(200).json(updatedSolution);
+    } catch (error) {
+      return res.status(500).json({ message: "Error liking solution" });
     }
   };
   

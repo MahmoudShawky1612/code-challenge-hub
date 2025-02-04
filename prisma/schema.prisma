@@ -57,4 +57,5 @@ model Solution {
   userId      String
   challenge   Challenge @relation(fields: [challengeId], references: [id])
   user        User     @relation(fields: [userId], references: [id])
+  likes       Int      @default(0)
 }

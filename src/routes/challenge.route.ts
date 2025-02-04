@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { createChallenge, getAllChallenges, getChallengeById, submitSolution, getSolutionsByChallenge, acceptSolution, updateChallengeStatus } from "../controllers/challenge.controller";
+import { createChallenge, getAllChallenges, getChallengeById, submitSolution, getSolutionsByChallenge, acceptSolution, updateChallengeStatus, likeSolution } from "../controllers/challenge.controller";
 import { authenticateJWT } from '../middleware/auth.middleware';
 
 const router = Router();
@@ -32,4 +32,8 @@ router.patch("/challenges/:id/status", authenticateJWT, async (req: Request, res
     await updateChallengeStatus(req, res);
   });
   
+router.post("/solutions/:solutionId/like", authenticateJWT, async (req: Request, res: Response) => {
+    await likeSolution(req, res);
+});
+
 export default router;
