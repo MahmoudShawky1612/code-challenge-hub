@@ -24,9 +24,9 @@ export const comparePassword = async (password:string, hashedPassword:string): P
     return await bcrypt.compare(password, hashedPassword);
 };
 
-export const generateToken = (userId: string): string => {
+export const generateToken = (userId: string, username: string,): string => {
     if (!process.env.JWT_SECRET) {
         throw new Error("JWT_SECRET is not defined");
     }
-    return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1d' });
+    return jwt.sign({ userId, username }, process.env.JWT_SECRET, { expiresIn: '10d' });
 }

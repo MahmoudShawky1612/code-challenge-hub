@@ -5,7 +5,7 @@ export const authenticateJWT = (
   req: Request,
   res: Response,
   next: NextFunction
-): void => { // 🔹 Explicit return type (void)
+): void => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
      res.status(401).json({ message: "Authorization token required" });
@@ -20,6 +20,7 @@ export const authenticateJWT = (
     }
 
     (req as any).user = user;
+    console.log((req as any).user)
     next();
   });
 };

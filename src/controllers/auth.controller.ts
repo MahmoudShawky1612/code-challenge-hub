@@ -24,7 +24,7 @@ export const signUp = async (req: Request, res: Response) => {
       },
     });
 
-    const token = generateToken(newUser.id);
+    const token = generateToken(newUser.id, newUser.username);
 
     return res.status(201).json({ message: "User created successfully", token });
   } catch (error) {
@@ -49,7 +49,7 @@ export const logIn = async (req: Request, res: Response) => {
     const isPasswordValid = await comparePassword(validatedData.password, user.password);
     if (!isPasswordValid) return res.status(400).json({ message: "Invalid credentials" });
 
-    return res.status(200).json({ message: "logIn successful", token: generateToken(user.id) });
+    return res.status(200).json({ message: "logIn successful", token: generateToken(user.id, user.username) });
   } catch (error) {
     if (error instanceof Error) {
         return res.status(400).json({ message: error.message || "Invalid data" });
