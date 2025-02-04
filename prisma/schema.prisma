@@ -46,6 +46,7 @@ model Solution {
   id          String   @id @default(uuid())
   code        String
   submittedAt DateTime @default(now())
+  accepted    Boolean  @default(false)
   challengeId String
   userId      String
   challenge   Challenge @relation(fields: [challengeId], references: [id])
