@@ -4,6 +4,7 @@ import express from 'express';
 import morgan from 'morgan';
 import authRoutes from './routes/auth.route';
 import challengeRoutes from './routes/challenge.route';
+import commentRoutes from './routes/comment.route';
 
 dotenv.config();
 
@@ -16,7 +17,7 @@ app.use(morgan("dev"));
 
 
 app.use("/api/auth", authRoutes);
-app.use("/api/v1", challengeRoutes);
+app.use("/api/v1", challengeRoutes,commentRoutes);
 
 
 export default app;
