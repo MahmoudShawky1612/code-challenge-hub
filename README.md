@@ -13,7 +13,7 @@ This is a coding challenge platform built using **Node.js, Express, Prisma, and 
 - Track rankings via leaderboard
 
 ---
-##Technologies Used
+## Technologies Used
 
 - Node.js - JavaScript runtime
 
