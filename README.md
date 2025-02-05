@@ -13,21 +13,21 @@ This is a coding challenge platform built using **Node.js, Express, Prisma, and 
 - Track rankings via leaderboard
 
 ---
-Technologies Used
+##Technologies Used
 
-Node.js - JavaScript runtime
+- Node.js - JavaScript runtime
 
-Express.js - Backend framework
+- Express.js - Backend framework
 
-Prisma - ORM for database interactions
+- Prisma - ORM for database interactions
 
-PostgreSQL - Database
+- PostgreSQL - Database
 
-JWT (JSON Web Token) - Authentication mechanism
+- JWT (JSON Web Token) - Authentication mechanism
 
-Zod - Schema validation
+- Zod - Schema validation
 
-Bcrypt - Password hashing
+- Bcrypt - Password hashing
 ---
 ## Installation and Setup
 ### Prerequisites
