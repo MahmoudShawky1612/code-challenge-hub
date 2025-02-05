@@ -248,27 +248,24 @@ export const getSortedSolutions = async (req:Request, res:Response) => {
 };
 
 export const getLeaderboard = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
   try {
-    const leaderboard = await prisma.solution.groupBy({
-      by: ["userId"],
-      where: {
-        challengeId: id,
-        accepted: true,
-      },
-      _count: {
-        userId: true,
-      },
-      orderBy: {
-        _count: {
-          userId: "desc",
-        },
-      },
-    });
+      const leaderboard = await prisma.user.findMany({
+          select: {
+              id: true,
+              username: true,
+              _count: {
+                  select: { solutions: { where: { accepted: true } } }
+              }
+          },
+          orderBy: {
+              solutions: {
+                  _count: "desc"
+              }
+          }
+      });
 
-    return res.status(200).json(leaderboard);
+      return res.status(200).json(leaderboard);
   } catch (error) {
-    return res.status(500).json({ message: "Error fetching leaderboard" });
+      return res.status(500).json({ message: "Error retrieving leaderboard" });
   }
 };
