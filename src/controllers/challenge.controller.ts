@@ -1,17 +1,9 @@
 import { ChallengeStatus, PrismaClient } from "@prisma/client";
 import { Request, Response } from 'express';
-import { z } from 'zod';
+import{challengeSchema, solutionSchema} from '../services/controller.service';
+
 const prisma = new PrismaClient();
 
-const challengeSchema = z.object({
-    title: z.string().min(3, "Title must be at least 3 characters"),
-    description: z.string().min(10, "Description must be at least 10 characters"),
-    difficulty: z.enum(["EASY", "MEDIUM", "HARD"]),
-})
-
-const solutionSchema = z.object({
-  code: z.string().min(10, "Solution code must be at least 10 characters long"),
-});
 
 export const createChallenge = async (req: Request, res: Response) => {
     try {
@@ -28,13 +20,11 @@ export const createChallenge = async (req: Request, res: Response) => {
                 description: validateData.description,
                 difficulty: validateData.difficulty,
                 user: {
-                    connect: { id: (req as any).user.userId }, // Connect the challenge to the authenticated user
+                    connect: { id: (req as any).user.userId },
                   },
                 
             }
         });
-
-        
 
         return res.status(201).json(newChallenge);
     } catch (error) {
@@ -152,6 +142,7 @@ export const acceptSolution = async(req:Request, res:Response)=>{
       })
 
       if(!solution) return res.status(404).json({message:"Solution not found"});
+      
       const challengeMaker = await prisma.challenge.findUnique({
         where:{id},
         select: {
@@ -248,24 +239,24 @@ export const getSortedSolutions = async (req:Request, res:Response) => {
 };
 
 export const getLeaderboard = async (req: Request, res: Response) => {
-  try {
-      const leaderboard = await prisma.user.findMany({
-          select: {
-              id: true,
-              username: true,
-              _count: {
-                  select: { solutions: { where: { accepted: true } } }
-              }
-          },
-          orderBy: {
-              solutions: {
-                  _count: "desc"
-              }
-          }
-      });
+    try {
+        const leaderboard = await prisma.user.findMany({
+            select: {
+                id: true,
+                username: true,
+                _count: {
+                    select: { solutions: { where: { accepted: true } } }
+                }
+            },
+            orderBy: {
+                solutions: {
+                    _count: "desc"
+                }
+            }
+        });
 
-      return res.status(200).json(leaderboard);
-  } catch (error) {
-      return res.status(500).json({ message: "Error retrieving leaderboard" });
-  }
+        return res.status(200).json(leaderboard);
+    } catch (error) {
+        return res.status(500).json({ message: "Error retrieving leaderboard" });
+    }
 };

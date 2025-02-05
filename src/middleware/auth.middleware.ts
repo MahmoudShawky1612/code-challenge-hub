@@ -20,7 +20,6 @@ export const authenticateJWT = (
     }
 
     (req as any).user = user;
-    console.log((req as any).user)
     next();
   });
 };
