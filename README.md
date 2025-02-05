@@ -1,6 +1,6 @@
 # Coding Challenge Platform
 
-This is a coding challenge platform built using **Node.js, Express, Prisma, and PostgreSQL**. The platform allows users to create coding challenges, submit solutions, comment on solutions, like solutions, and track their rankings via a leaderboard.
+This is a coding challenge platform built using **TypeScript, Node.js, Express, Prisma, and PostgreSQL**. The platform allows users to create coding challenges, submit solutions, comment on solutions, like solutions, and track their rankings via a leaderboard.
 
 ---
 ## Features
@@ -15,6 +15,8 @@ This is a coding challenge platform built using **Node.js, Express, Prisma, and 
 ---
 ## Technologies Used
 
+- TypeScript
+  
 - Node.js - JavaScript runtime
 
 - Express.js - Backend framework
