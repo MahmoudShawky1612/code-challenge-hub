@@ -229,3 +229,46 @@ export const acceptSolution = async(req:Request, res:Response)=>{
     }
   };
   
+
+export const getSortedSolutions = async (req:Request, res:Response) => {
+  try {
+    const {id} = req.params;
+    const {sortBy} = req.query;
+    const solutions = await prisma.solution.findMany({
+      where:{challengeId:id},
+      orderBy:{
+        [sortBy === "likes" ? "likes" : "createdAt"]:"desc",
+      },
+    });
+
+    return res.status(200).json(solutions);
+  } catch (error) {
+    return res.status(500).json({ message: "Error retrieving solutions" });
+  }
+};
+
+export const getLeaderboard = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const leaderboard = await prisma.solution.groupBy({
+      by: ["userId"],
+      where: {
+        challengeId: id,
+        accepted: true,
+      },
+      _count: {
+        userId: true,
+      },
+      orderBy: {
+        _count: {
+          userId: "desc",
+        },
+      },
+    });
+
+    return res.status(200).json(leaderboard);
+  } catch (error) {
+    return res.status(500).json({ message: "Error fetching leaderboard" });
+  }
+};
