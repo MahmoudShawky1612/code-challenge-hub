@@ -66,7 +66,7 @@ This will create the necessary tables in your PostgreSQL database.
 ```sh
 npm run dev
 ```
-The server will run on `http://localhost:3000`
+The server will run on `http://localhost:30000`
 
 ---
 ## API Endpoints
